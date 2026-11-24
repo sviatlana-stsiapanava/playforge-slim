@@ -1,0 +1,52 @@
+version: 3.0.0
+name: create-test
+description: Create a new Playwright test from request to verified closure, with scope confirmed, cases crafted, implementation reviewed independently, and closure verified.
+applies_when:
+  - the user asks to create a new Playwright test
+inputs:
+  - CLAUDE.md
+  - docs/conventions/page-objects.md
+  - docs/conventions/components.md
+steps:
+  - id: clarify-scope
+    goal: >-
+      Confirm starting state, test data, expected result, negative cases, and placement with the user before any code
+      is read or written. Done when the artifact `Skill: clarify-test-scope - output below` is present.
+    skills: [clarify-test-scope]
+    on_failure: ask_user
+
+  - id: craft-cases
+    needs: [clarify-scope]
+    goal: >-
+      Obtain the case table that is the only source of scenarios. If the request names an existing
+      test-cases/<feature-slug>.md, load it and do not continue until its case table is loaded; otherwise craft one.
+      Done when the case table is loaded or the artifact `Skill: craft-test-case - output below` is present.
+    skills: [craft-test-case]
+    on_failure: ask_user
+
+  - id: implement
+    needs: [craft-cases]
+    goal: >-
+      Implement every case as a Playwright spec following the page-object and component conventions, and run it until
+      it passes. Done when the artifact `Skill: implement-test - output below` is present.
+    skills: [implement-test]
+    on_failure: stop
+
+  - id: review
+    needs: [implement]
+    goal: >-
+      Review the changed spec in fresh context. The reviewer does not see the conversation, so pass it the spec path,
+      the convention files, and the confirmed scope from clarify-scope. On a needs-work verdict, return to implement
+      with the findings and review again. Done when the artifact `Agent: test-reviewer - output below` is present with
+      the verdict approve.
+    agent: test-reviewer
+    retries: 2
+    on_failure: ask_user
+
+  - id: close
+    needs: [review]
+    goal: >-
+      Verify every artifact, the passing run, and reviewer approval against the original request. Done when the
+      artifact `Skill: task-complete - output below` is present.
+    skills: [task-complete]
+    on_failure: stop
