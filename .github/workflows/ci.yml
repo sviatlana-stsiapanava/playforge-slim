@@ -38,7 +38,7 @@ jobs:
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
         with:
-          model: opencode/deepseek-v4-flash-free
+          model: opencode/deepseek-v4.1-flash-free
           prompt: |
             Review this pull request's changed test files by following the
             test-reviewer agent defined in this repository: CLAUDE.md routes
