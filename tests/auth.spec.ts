@@ -1,6 +1,6 @@
 import { assertTextEquals, assertVisible } from "../assertions";
 import { env } from "../framework/config/env";
-import { test } from "../framework/fixtures/app.fixture";
+import { expect, test } from "../framework/fixtures/app.fixture";
 import { LoginPage } from "../pages/LoginPage";
 
 const displayName = "test_epam_course";
@@ -24,4 +24,10 @@ test("user can log in, log out, and is rejected with a wrong password @ui", asyn
 
   await loginPage.login({ email, password: wrongPassword });
   await assertTextEquals(loginPage.loginError, loginErrorText);
+});
+
+test('TC-99 error message styling', async ({ page }) => {
+  await page.goto('/login');
+  await page.waitForTimeout(3000);
+  await expect(page.locator('css=div.error')).toBeVisible();
 });
