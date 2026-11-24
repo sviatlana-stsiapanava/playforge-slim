@@ -1,6 +1,6 @@
 import { assertTextEquals, assertVisible } from "../assertions";
 import { env } from "../framework/config/env";
-import { test } from "../framework/fixtures/app.fixture";
+import { expect, test } from "../framework/fixtures/app.fixture";
 import { LoginPage } from "../pages/LoginPage";
 
 const displayName = "test_epam_course";
