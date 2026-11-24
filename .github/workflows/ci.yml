@@ -3,7 +3,7 @@ on:
   pull_request:
 jobs:
   tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       # .env is gitignored, so CI supplies the config the specs read via
       # framework/config/env.ts. Set BASE_URL as a repository variable.
